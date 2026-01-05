@@ -17,7 +17,9 @@ return {
 		},
 		spec = {
 			-- Leader groups
+			{ "<leader>b", group = "buffer", icon = { icon = "", color = "blue" } },
 			{ "<leader>c", group = "claude", icon = { icon = "", color = "purple" } },
+			{ "<leader>d", group = "debug", icon = { icon = "", color = "red" } },
 			{ "<leader>f", group = "find", icon = { icon = "", color = "cyan" } },
 			{ "<leader>g", group = "git", icon = { icon = "", color = "green" } },
 			{ "<leader>h", group = "git hunk", icon = { icon = "", color = "orange" } },
@@ -25,6 +27,9 @@ return {
 			{ "<leader>r", group = "refactor", icon = { icon = "", color = "blue" } },
 			{ "<leader>t", group = "toggle", icon = { icon = "", color = "yellow" } },
 			{ "<leader>x", group = "trouble", icon = { icon = "", color = "red" } },
+			-- Core keymaps
+			{ "<leader>w", desc = "Save file", icon = { icon = "", color = "green" } },
+			{ "<leader>q", desc = "Quit", icon = { icon = "", color = "red" } },
 			-- Navigation groups
 			{ "[", group = "prev" },
 			{ "]", group = "next" },

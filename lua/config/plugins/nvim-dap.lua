@@ -9,16 +9,16 @@ return {
       "leoluz/nvim-dap-go",
     },
     keys = {
-      { "<leader>db", desc = "Toggle breakpoint" },
-      { "<leader>dB", desc = "Breakpoint condition" },
-      { "<leader>dc", desc = "Continue" },
-      { "<leader>do", desc = "Step over" },
-      { "<leader>di", desc = "Step into" },
-      { "<leader>dO", desc = "Step out" },
-      { "<leader>dr", desc = "Toggle REPL" },
-      { "<leader>dl", desc = "Run last" },
-      { "<leader>du", desc = "Toggle DAP UI" },
-      { "<leader>dt", desc = "Terminate" },
+      { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Toggle breakpoint" },
+      { "<leader>dB", function() require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, desc = "Breakpoint condition" },
+      { "<leader>dc", function() require("dap").continue() end, desc = "Continue" },
+      { "<leader>do", function() require("dap").step_over() end, desc = "Step over" },
+      { "<leader>di", function() require("dap").step_into() end, desc = "Step into" },
+      { "<leader>dO", function() require("dap").step_out() end, desc = "Step out" },
+      { "<leader>dr", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
+      { "<leader>dl", function() require("dap").run_last() end, desc = "Run last" },
+      { "<leader>du", function() require("dapui").toggle() end, desc = "Toggle DAP UI" },
+      { "<leader>dt", function() require("dap").terminate() end, desc = "Terminate" },
     },
     config = function()
       local dap = require("dap")
@@ -150,20 +150,6 @@ return {
       dap.listeners.before.event_exited["dapui_config"] = function()
         dapui.close()
       end
-
-      -- Keymaps
-      vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })
-      vim.keymap.set("n", "<leader>dB", function()
-        dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
-      end, { desc = "Breakpoint condition" })
-      vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "Continue" })
-      vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "Step over" })
-      vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "Step into" })
-      vim.keymap.set("n", "<leader>dO", dap.step_out, { desc = "Step out" })
-      vim.keymap.set("n", "<leader>dr", dap.repl.toggle, { desc = "Toggle REPL" })
-      vim.keymap.set("n", "<leader>dl", dap.run_last, { desc = "Run last" })
-      vim.keymap.set("n", "<leader>du", dapui.toggle, { desc = "Toggle DAP UI" })
-      vim.keymap.set("n", "<leader>dt", dap.terminate, { desc = "Terminate" })
 
       -- Breakpoint signs
       vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpoint", linehl = "", numhl = "" })

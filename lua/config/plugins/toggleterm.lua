@@ -3,7 +3,7 @@ return {
   version = "*",
   keys = {
     { "<C-\\>", desc = "Toggle terminal" },
-    { "<leader>tt", desc = "Toggle terminal" },
+    { "<leader>tt", "<cmd>ToggleTerm<CR>", desc = "Toggle terminal" },
     { "<leader>tg", desc = "Toggle lazygit" },
   },
   config = function()
@@ -68,7 +68,5 @@ return {
     vim.keymap.set("n", "<leader>tg", function()
       lazygit:toggle()
     end, { desc = "Toggle lazygit" })
-
-    vim.keymap.set("n", "<leader>tt", "<cmd>ToggleTerm<CR>", { desc = "Toggle terminal" })
   end,
 }

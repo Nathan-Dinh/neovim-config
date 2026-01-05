@@ -3,8 +3,6 @@ return {
 		"ellisonleao/gruvbox.nvim",
 		priority = 1000, -- load first
 		config = function()
-			-- Required
-			vim.o.termguicolors = true
 			vim.o.background = "dark" -- "dark" or "light"
 
 			-- Optional Gruvbox settings
