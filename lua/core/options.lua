@@ -8,6 +8,12 @@ vim.opt.autowrite = true
 vim.opt.cursorline = true
 vim.opt.autoread = true
 
+-- Auto-reload files when changed externally
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+	pattern = "*",
+	command = "if mode() != 'c' | checktime | endif",
+})
+
 -- Indentation
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
@@ -51,25 +57,31 @@ vim.opt.mouse = "a"
 -- Completion
 vim.opt.completeopt = "menuone,noselect"
 
+-- Folding (treesitter-based, native in 0.11+)
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+
 -- Disable swapfile (undo is enough)
 vim.opt.swapfile = false
 
 -- Diagnostics
 vim.diagnostic.config({
-  virtual_text = true,
-  signs = {
-    text = {
-      [vim.diagnostic.severity.ERROR] = "",
-      [vim.diagnostic.severity.WARN] = "",
-      [vim.diagnostic.severity.HINT] = "",
-      [vim.diagnostic.severity.INFO] = "",
-    },
-  },
-  underline = true,
-  update_in_insert = false,
-  severity_sort = true,
-  float = {
-    border = "rounded",
-    source = true,
-  },
+	virtual_text = true,
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = "",
+			[vim.diagnostic.severity.WARN] = "",
+			[vim.diagnostic.severity.HINT] = "",
+			[vim.diagnostic.severity.INFO] = "",
+		},
+	},
+	underline = true,
+	update_in_insert = false,
+	severity_sort = true,
+	float = {
+		border = "rounded",
+		source = true,
+	},
 })

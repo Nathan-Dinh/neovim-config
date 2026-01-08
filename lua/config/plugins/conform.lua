@@ -37,7 +37,7 @@ return {
           return
         end
         return {
-          lsp_fallback = true,
+          lsp_format = "fallback",
           async = false,
           timeout_ms = 1000,
         }
@@ -54,7 +54,7 @@ return {
     -- Manual format
     vim.keymap.set({ "n", "v" }, "<leader>l", function()
       conform.format({
-        lsp_fallback = true,
+        lsp_format = "fallback",
         async = false,
         timeout_ms = 500,
       })

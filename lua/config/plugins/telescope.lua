@@ -1,6 +1,5 @@
 return {
 	"nvim-telescope/telescope.nvim",
-	branch = "0.1.x",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
@@ -59,6 +58,34 @@ return {
 				require("telescope.builtin").diagnostics()
 			end,
 			desc = "Diagnostics",
+		},
+		{
+			"<leader>fr",
+			function()
+				require("telescope.builtin").oldfiles()
+			end,
+			desc = "Recent files",
+		},
+		{
+			"<leader>fs",
+			function()
+				require("telescope.builtin").lsp_document_symbols()
+			end,
+			desc = "Document symbols",
+		},
+		{
+			"<leader>fS",
+			function()
+				require("telescope.builtin").lsp_workspace_symbols()
+			end,
+			desc = "Workspace symbols",
+		},
+		{
+			"<leader>fk",
+			function()
+				require("telescope.builtin").keymaps()
+			end,
+			desc = "Keymaps",
 		},
 	},
 }

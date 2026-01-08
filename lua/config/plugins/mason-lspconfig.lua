@@ -1,3 +1,11 @@
+local function get_typescript_sdk()
+  local project_ts = vim.fn.getcwd() .. "/node_modules/typescript/lib"
+  if vim.fn.isdirectory(project_ts) == 1 then
+    return project_ts
+  end
+  return vim.fn.stdpath("data") .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
+end
+
 return {
   "mason-org/mason-lspconfig.nvim",
   dependencies = {
@@ -7,97 +15,120 @@ return {
   config = function()
     require("mason-lspconfig").setup({
       ensure_installed = {
-        -- Lua
         "lua_ls",
-        -- Python
         "pyright",
-        -- JavaScript/TypeScript
         "ts_ls",
-        -- Vue
         "vue_ls",
-        -- Web
         "html",
         "cssls",
         "jsonls",
         "yamlls",
-        -- Shell
         "bashls",
-        -- Rust
         "rust_analyzer",
-        -- Go
         "gopls",
-        -- C/C++
         "clangd",
       },
-      handlers = {
-        function(server)
-          require("lspconfig")[server].setup({})
-        end,
-        ["lua_ls"] = function()
-          require("lspconfig").lua_ls.setup({
-            settings = {
-              Lua = {
-                runtime = { version = "LuaJIT" },
-                workspace = {
-                  checkThirdParty = false,
-                  library = { vim.env.VIMRUNTIME },
-                },
-                hint = { enable = true },
-              },
-            },
-          })
-        end,
-        ["jsonls"] = function()
-          require("lspconfig").jsonls.setup({
-            settings = {
-              json = {
-                schemas = require("schemastore").schemas(),
-                validate = { enable = true },
-              },
-            },
-          })
-        end,
-        ["yamlls"] = function()
-          require("lspconfig").yamlls.setup({
-            settings = {
-              yaml = {
-                schemaStore = {
-                  enable = false,
-                  url = "",
-                },
-                schemas = require("schemastore").schemas(),
-              },
-            },
-          })
-        end,
-        ["rust_analyzer"] = function()
-          require("lspconfig").rust_analyzer.setup({
-            settings = {
-              ["rust-analyzer"] = {
-                checkOnSave = {
-                  command = "clippy",
-                },
-                cargo = {
-                  allFeatures = true,
-                },
-              },
-            },
-          })
-        end,
-        ["gopls"] = function()
-          require("lspconfig").gopls.setup({
-            settings = {
-              gopls = {
-                analyses = {
-                  unusedparams = true,
-                },
-                staticcheck = true,
-                gofumpt = true,
-              },
-            },
-          })
-        end,
+    })
+
+    -- Configure LSP servers using new vim.lsp.config API (Neovim 0.11+)
+    vim.lsp.config("lua_ls", {
+      settings = {
+        Lua = {
+          runtime = { version = "LuaJIT" },
+          workspace = {
+            checkThirdParty = false,
+            library = { vim.env.VIMRUNTIME },
+          },
+          hint = { enable = true },
+        },
       },
+    })
+
+    vim.lsp.config("jsonls", {
+      settings = {
+        json = {
+          schemas = require("schemastore").json.schemas(),
+          validate = { enable = true },
+        },
+      },
+    })
+
+    vim.lsp.config("yamlls", {
+      settings = {
+        yaml = {
+          schemaStore = {
+            enable = false,
+            url = "",
+          },
+          schemas = require("schemastore").yaml.schemas(),
+        },
+      },
+    })
+
+    vim.lsp.config("rust_analyzer", {
+      settings = {
+        ["rust-analyzer"] = {
+          checkOnSave = {
+            command = "clippy",
+          },
+          cargo = {
+            allFeatures = true,
+          },
+        },
+      },
+    })
+
+    vim.lsp.config("gopls", {
+      settings = {
+        gopls = {
+          analyses = {
+            unusedparams = true,
+          },
+          staticcheck = true,
+          gofumpt = true,
+        },
+      },
+    })
+
+    -- TypeScript with Vue plugin support
+    local vue_plugin_path = vim.fn.stdpath("data")
+      .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+
+    vim.lsp.config("ts_ls", {
+      init_options = {
+        plugins = {
+          {
+            name = "@vue/typescript-plugin",
+            location = vue_plugin_path,
+            languages = { "vue" },
+          },
+        },
+      },
+      filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+    })
+
+    vim.lsp.config("vue_ls", {
+      init_options = {
+        typescript = {
+          tsdk = get_typescript_sdk(),
+        },
+      },
+    })
+
+    -- Enable all configured servers
+    vim.lsp.enable({
+      "lua_ls",
+      "pyright",
+      "ts_ls",
+      "vue_ls",
+      "html",
+      "cssls",
+      "jsonls",
+      "yamlls",
+      "bashls",
+      "rust_analyzer",
+      "gopls",
+      "clangd",
     })
 
     -- LSP keybindings (set when LSP attaches to buffer)

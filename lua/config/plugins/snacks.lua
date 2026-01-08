@@ -11,13 +11,7 @@ return {
 			pane_gap = 4, -- empty columns between vertical panes
 			autokeys = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", -- autokey sequence
 			preset = {
-				-- Defaults to a picker that supports `fzf-lua`, `telescope.nvim` and `mini.pick`
-				---@type fun(cmd:string, opts:table)|nil
 				pick = nil,
-				-- Used by the `keys` section to show keymaps.
-				-- Set your custom keymaps here.
-				-- When using a function, the `items` argument are the default keymaps.
-				---@type snacks.dashboard.Item[]
 				keys = {
 					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
 					{ icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
@@ -29,7 +23,7 @@ return {
 					},
 					{
 						icon = " ",
-						key = "c",
+						key = "C",
 						desc = "Config",
 						action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})",
 					},
@@ -76,12 +70,46 @@ return {
 		explorer = { enabled = true },
 		indent = { enabled = true },
 		input = { enabled = true },
-		picker = { enabled = true },
+		picker = { enabled = false },
 		notifier = { enabled = true },
 		quickfile = { enabled = true },
 		scope = { enabled = true },
 		scroll = { enabled = true },
 		statuscolumn = { enabled = true },
 		words = { enabled = true },
+		lazygit = { enabled = true },
+		terminal = { enabled = false },
+	},
+	keys = {
+		-- Explorer
+		{
+			"<leader>E",
+			function()
+				Snacks.explorer()
+			end,
+			desc = "File explorer",
+		},
+		-- Lazygit
+		{
+			"<leader>lg",
+			function()
+				Snacks.lazygit()
+			end,
+			desc = "Lazygit",
+		},
+		{
+			"<leader>lf",
+			function()
+				Snacks.lazygit.log_file()
+			end,
+			desc = "Lazygit current file",
+		},
+		{
+			"<leader>ll",
+			function()
+				Snacks.lazygit.log()
+			end,
+			desc = "Lazygit log",
+		},
 	},
 }
