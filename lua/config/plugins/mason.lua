@@ -1,4 +1,10 @@
 return {
 	"mason-org/mason.nvim",
-	opts = {},
+	lazy = false,
+	opts = {
+		registries = {
+			"github:mason-org/mason-registry",
+			"github:Crashdummyy/mason-registry",
+		},
+	},
 }
