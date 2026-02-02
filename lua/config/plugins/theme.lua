@@ -1,19 +1,23 @@
 return {
 	{
 		"ellisonleao/gruvbox.nvim",
-		priority = 1000, -- load first
+		lazy = false,
+		priority = 1000,
 		config = function()
-			vim.o.background = "dark" -- "dark" or "light"
-
-			-- Optional Gruvbox settings
-			vim.g.gruvbox_contrast_dark = "medium" -- soft | medium | hard
-			vim.g.gruvbox_bold = true
-			vim.g.gruvbox_italic = true
-			vim.g.gruvbox_transparent_bg = false
-			vim.g.gruvbox_underline = true
-			vim.g.gruvbox_undercurl = true
-
-			-- Apply colorscheme
+			require("gruvbox").setup({
+				contrast = "medium",
+				bold = true,
+				italic = {
+					strings = true,
+					comments = true,
+					operators = false,
+					folds = true,
+				},
+				transparent_mode = false,
+				underline = true,
+				undercurl = true,
+			})
+			vim.o.background = "dark"
 			vim.cmd.colorscheme("gruvbox")
 		end,
 	},

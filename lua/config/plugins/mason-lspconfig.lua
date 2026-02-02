@@ -6,28 +6,31 @@ local function get_typescript_sdk()
   return vim.fn.stdpath("data") .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
 end
 
+local servers = {
+  "lua_ls",
+  "pyright",
+  "ts_ls",
+  "vue_ls",
+  "html",
+  "cssls",
+  "jsonls",
+  "yamlls",
+  "bashls",
+  "rust_analyzer",
+  "gopls",
+  "clangd",
+}
+
 return {
   "mason-org/mason-lspconfig.nvim",
+  lazy = false,
   dependencies = {
     "mason-org/mason.nvim",
     "neovim/nvim-lspconfig",
   },
   config = function()
     require("mason-lspconfig").setup({
-      ensure_installed = {
-        "lua_ls",
-        "pyright",
-        "ts_ls",
-        "vue_ls",
-        "html",
-        "cssls",
-        "jsonls",
-        "yamlls",
-        "bashls",
-        "rust_analyzer",
-        "gopls",
-        "clangd",
-      },
+      ensure_installed = servers,
     })
 
     -- Configure LSP servers using new vim.lsp.config API (Neovim 0.11+)
@@ -90,6 +93,14 @@ return {
       },
     })
 
+    vim.lsp.config("roslyn", {
+      settings = {
+        ["csharp|inlay_hints"] = {
+          csharp_enable_inlay_hints_for_implicit_object_creation = true,
+        },
+      },
+    })
+
     -- TypeScript with Vue plugin support
     local vue_plugin_path = vim.fn.stdpath("data")
       .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
@@ -116,20 +127,7 @@ return {
     })
 
     -- Enable all configured servers
-    vim.lsp.enable({
-      "lua_ls",
-      "pyright",
-      "ts_ls",
-      "vue_ls",
-      "html",
-      "cssls",
-      "jsonls",
-      "yamlls",
-      "bashls",
-      "rust_analyzer",
-      "gopls",
-      "clangd",
-    })
+    vim.lsp.enable(servers)
 
     -- LSP keybindings (set when LSP attaches to buffer)
     vim.api.nvim_create_autocmd("LspAttach", {

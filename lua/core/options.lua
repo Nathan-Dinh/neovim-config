@@ -1,5 +1,12 @@
 -- Core vim options
 
+-- Filetype detection for custom filetypes
+vim.filetype.add({
+  extension = {
+    hurl = "hurl",
+  },
+})
+
 -- Backspace behavior
 vim.opt.backspace = "2"
 vim.opt.showcmd = true
@@ -45,8 +52,12 @@ vim.opt.sidescrolloff = 8
 -- UI
 vim.opt.signcolumn = "yes"
 vim.opt.termguicolors = true
-vim.opt.updatetime = 250
+vim.opt.updatetime = 200
 vim.opt.timeoutlen = 300
+
+-- Performance
+vim.opt.synmaxcol = 240           -- Don't highlight long lines (perf)
+vim.opt.redrawtime = 1500         -- Time for syntax highlight before giving up
 
 -- System clipboard
 vim.opt.clipboard = "unnamedplus"

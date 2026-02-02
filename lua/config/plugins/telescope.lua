@@ -5,7 +5,55 @@ return {
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 	},
 	config = function()
-		require("telescope").load_extension("fzf")
+		local telescope = require("telescope")
+		local actions = require("telescope.actions")
+
+		telescope.setup({
+			defaults = {
+				-- Performance: use native fzf
+				sorting_strategy = "ascending",
+				layout_config = {
+					horizontal = { prompt_position = "top" },
+				},
+				-- Ignore heavy directories
+				file_ignore_patterns = {
+					"node_modules",
+					".git/",
+					"bin/",
+					"obj/",
+					"target/",
+					"%.lock",
+					"__pycache__",
+					"%.pyc",
+				},
+				-- Faster previewer
+				preview = {
+					filesize_limit = 0.5, -- MB
+					timeout = 250,
+				},
+				mappings = {
+					i = {
+						["<C-j>"] = actions.move_selection_next,
+						["<C-k>"] = actions.move_selection_previous,
+						["<Esc>"] = actions.close,
+					},
+				},
+			},
+			pickers = {
+				find_files = {
+					-- Use fd if available (faster than find)
+					find_command = vim.fn.executable("fd") == 1
+						and { "fd", "--type", "f", "--strip-cwd-prefix", "--hidden", "--exclude", ".git" }
+						or nil,
+				},
+				live_grep = {
+					-- Use rg args for speed
+					additional_args = { "--hidden", "--glob", "!.git/*" },
+				},
+			},
+		})
+
+		telescope.load_extension("fzf")
 	end,
 	keys = {
 		{

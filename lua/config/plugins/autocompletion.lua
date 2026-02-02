@@ -1,6 +1,7 @@
 return {
 	{
 		"saghen/blink.cmp",
+		lazy = false,
 		dependencies = { "rafamadriz/friendly-snippets" },
 		version = "1.*",
 		opts = {
@@ -27,13 +28,15 @@ return {
 				accept = { auto_brackets = { enabled = true } },
 				documentation = {
 					auto_show = true,
-					auto_show_delay_ms = 150,
+					-- Faster doc popup (was 150ms)
+					auto_show_delay_ms = 50,
 					window = { border = "rounded" },
 				},
 				ghost_text = { enabled = true },
 				list = {
 					selection = { preselect = true, auto_insert = false },
-					max_items = 15,
+					-- Reduced from 15 for faster rendering
+					max_items = 10,
 				},
 				menu = {
 					border = "rounded",
@@ -50,18 +53,35 @@ return {
 					show_on_insert_on_trigger_character = true,
 				},
 			},
+			-- Fuzzy matching improvements
+			fuzzy = {
+				-- Use frecency for smarter sorting (learns your patterns)
+				frecency = { enabled = true },
+				-- Typo tolerance
+				max_typos = 1,
+			},
 			sources = {
 				default = { "lsp", "path", "snippets", "buffer" },
 				per_filetype = {
 					lua = { "lsp", "path", "snippets", "buffer" },
+					-- C# specific: prioritize LSP heavily
+					cs = { "lsp", "snippets", "path" },
 				},
 				providers = {
-					lsp = { score_offset = 100 },
+					lsp = {
+						score_offset = 100,
+						-- Timeout for slow LSPs (like OmniSharp)
+						timeout_ms = 2000,
+						-- Async for better responsiveness
+						async = true,
+					},
 					path = { score_offset = 50 },
 					snippets = { score_offset = 30 },
 					buffer = {
 						score_offset = 10,
 						min_keyword_length = 3,
+						-- Don't index huge files
+						max_items = 5,
 					},
 				},
 			},

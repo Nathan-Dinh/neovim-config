@@ -22,4 +22,31 @@ require("lazy").setup({
   spec = {
     { import = "config.plugins" },
   },
+  -- Performance optimizations
+  defaults = {
+    lazy = true,  -- Lazy-load all plugins by default
+  },
+  checker = {
+    enabled = false,  -- Don't check for updates on startup
+  },
+  change_detection = {
+    notify = false,   -- Don't notify on config changes
+  },
+  performance = {
+    cache = {
+      enabled = true,
+    },
+    rtp = {
+      disabled_plugins = {
+        "gzip",
+        "matchit",
+        "matchparen",
+        "netrwPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
+      },
+    },
+  },
 })
